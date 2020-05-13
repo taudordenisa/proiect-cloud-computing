@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Songs list</title>
+    </head>
+    <body>
+        <h1>Songs</h1>
+    </body>
+    
+    <form onSubmit="saveSong(event)">
+        <input type="hidden" name="id" id="id"/> <br/>
+        Singer Name:<br/>
+        <input type="text" name="singer" id="singer"/> <br/>
+        Album:<br/>
+        <input type="text" name="album" id="album"> <br/>
+        Song Name:<br/>
+        <textarea name="name" id="name"></textarea> <br/>
+        <input type="submit" value="Save song">
+        <input type="reset" value="Cancel">
+    </form>
+    
+    <div id="table"></div>
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script 
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+        
+    <script type="text/javascript">
+        function showSongs() {
+            axios.get('/songs').then(function(results) {
+                
+                let html = ` <table style="width:500px;">
+                        <tr>
+                            <th>ID</th>
+                            <th>Singer Name</th>
+                            <th>Album</th> 
+                            <th>Song Name</th>
+                            <th>Actions</th>
+                        </tr>`
+                
+                results.data.forEach(function(element) {
+                    html += `<tr>
+                                <td>${element.id}</td>
+                                <td>${element.singer}</td>
+                                <td>${element.album}</td>
+                                <td>${element.name}</td>
+                                <td>
+                                    <button onClick="editSong(${element.id})">Edit</button>
+                                    <button onClick="deleteSong(${element.id})">Delete</button>
+                                </td>
+                            </tr>`
+                })
+
+                html += `</table>`
+                
+                $('#table').html(html)
+            }).catch(function(error) {
+                console.log(error)
+            })
+        }
+
+        function saveSong(event) {
+            event.preventDefault()
+            
+            //get values from fields
+            let id = $('#id').val()
+            let singer = $('#singer').val()
+            let album = $('#album').val()
+            let name = $('#name').val()
+            
+            if(id) {
+                axios.put('/songs/'+id, {
+                    singer: singer,
+                    album: album,
+                    name: name
+                }).then(function(result) {
+                    showSongs()
+                    $(event.target).trigger("reset")
+                }).catch(function(err) {
+                    alert('Resource could not be saved')
+                })
+            } else {
+                axios.post('/songs', {
+                    singer: singer,
+                    album: album,
+                    name: name
+                }).then(function(result) {
+                    showSongs()
+                    $(event.target).trigger("reset")
+                }).catch(function(err) {
+                    alert('Resource could not be saved')
+                })
+            }
+        }
+        
+        function editSong(id) {
+            //get the values from the server
+            axios.get('/songs/'+id).then(function(result) {
+                //display values in the form
+                $('#id').val(result.data.id)
+                $('#singer').val(result.data.singer)
+                $('#album').val(result.data.album)
+                $('#name').val(result.data.name) 
+            }).catch(function(err) {
+                console.log(err)
+                alert('Could not find resource')
+            })
+        }
+
+        function deleteSong(id) {
+            axios.delete('/songs/'+id).then(function(result) {
+                showSongs()
+            }).catch(function(err) {
+                alert('Resource could not delete resource')
+            }) 
+        }
+        
+        $(document).ready(function() {
+            console.log('Hello from JQuery')
+            showSongs()
+        })
+    </script>
+</html>

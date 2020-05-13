@@ -1,0 +1,25 @@
+{
+  "name": "cloud-computing",
+  "version": "1.0.0",
+  "description": "Proiect Cloud",
+  "main": "backend.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taudordenisa/proiect-cloud-computing.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/taudordenisa/proiect-cloud-computing/issues"
+  },
+  "homepage": "https://github.com/taudordenisa/proiect-cloud-computing#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
+    "mysql2": "^2.1.0",
+    "sequelize": "^5.21.8"
+  }
+}
