@@ -72,6 +72,7 @@
         crossorigin="anonymous"></script>
         
     <script type="text/javascript">
+        //Manage Tabs
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tabcontent");
@@ -86,6 +87,7 @@
             evt.currentTarget.className += " active";
         }
         
+        //Pull data from iTunes using API
         function dataPullITunes() {
             let searchValue = $('#searchValue').val()
             let resultsNumber = $('#resultsNumber').val()
@@ -126,6 +128,7 @@
             })
         }
         
+        //Pull data from Lyrics.ovh using API
         function dataPullLyrics() {
             let artist = $('#artistLyrics').val()
             let title = $('#songLyrics').val()
@@ -142,9 +145,9 @@
             })
         }
   
+        //Display all songs from Data Base
         function showSongs() {
             axios.get('/songs').then(function(results) {
-                
                 let html = ` <table style="width:500px;">
                         <tr>
                             <th>ID</th>
@@ -175,6 +178,7 @@
             })
         }
 
+        //Insert a song to Data Base
         function saveSong(event) {
             event.preventDefault()
             
@@ -208,6 +212,7 @@
             }
         }
         
+        //Update a song from Data Base
         function editSong(id) {
             axios.get('/songs/'+id).then(function(result) {
                 $('#id').val(result.data.id)
@@ -220,6 +225,7 @@
             })
         }
 
+        //Delete a song from Data Base
         function deleteSong(id) {
             axios.delete('/songs/'+id).then(function(result) {
                 showSongs()
@@ -229,6 +235,7 @@
             }) 
         }
         
+        //Run when the page is first loaded
         $(document).ready(function() {
             showSongs()
         })

@@ -56,6 +56,6 @@ body {font-family: Arial;}
 }
 
 .column {
-  flex: 30%;
+  width: 20%;
   padding: 10px;
 }
