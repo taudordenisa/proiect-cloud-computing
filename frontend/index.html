@@ -94,33 +94,37 @@
             let urlEncoded = encodeURI("https://itunes.apple.com/search?term='" + searchValue + "'&limit=" + resultsNumber + "&media=music")
             axios.get(urlEncoded)
             .then(function(response) { 
-                let htmlITunes = ` <table >
-                        <tr>
-                            <th>Artist</th>
-                            <th>Song Name</th>
-                            <th>Collection</th>
-                            <th>Country</th>
-                            <th>Preview Song</th>
-                        </tr>`
-                        
-                response.data.results.forEach(function(song) {
-                    htmlITunes += `<tr>
-                                <td>${song.artistName}</td>
-                                <td>${song.trackName}</td>
-                                <td>${song.collectionName}</td>
-                                <td>${song.country}</td>
-                                <td>
-                                    <audio controls>
-                                        <source src="${song.previewUrl}" type="audio/mpeg">
-                                        Your browser does not support the audio element.
-                                    </audio>
-                                </td>
+                if(response.data.results.length > 0) {
+                    let htmlITunes = ` <table >
+                            <tr>
+                                <th>Artist</th>
+                                <th>Song Name</th>
+                                <th>Collection</th>
+                                <th>Country</th>
+                                <th>Preview Song</th>
                             </tr>`
-                })
-                
-                htmlITunes += `</table>`
-                
-                $('#tableITunes').html(htmlITunes)
+                            
+                    response.data.results.forEach(function(song) {
+                        htmlITunes += `<tr>
+                                    <td>${song.artistName}</td>
+                                    <td>${song.trackName}</td>
+                                    <td>${song.collectionName}</td>
+                                    <td>${song.country}</td>
+                                    <td>
+                                        <audio controls>
+                                            <source src="${song.previewUrl}" type="audio/mpeg">
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                    </td>
+                                </tr>`
+                    })
+                    
+                    htmlITunes += `</table>`
+                    
+                    $('#tableITunes').html(htmlITunes)
+                } else {
+                    throw "No items available! Please search for another song."
+                }
             })
             .catch(function(error) {
                 console.log(error)
