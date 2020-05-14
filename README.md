@@ -246,7 +246,7 @@ sequelize.authenticate().then(() => {
 ```
 
 ## Capturi ecran aplicație
-
+![Data Base](https://github.com/taudordenisa/proiect-cloud-computing/blob/master/Data%20Base.PNG)
 
 ## Referințe
 * [Cloud Computing - National Institute of Standards and Technology](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-145.pdf)
