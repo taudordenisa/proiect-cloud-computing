@@ -6,7 +6,7 @@ const sequelize = new Sequelize('music', 'taudordenisa', 'tdenisa5', {
     dialect: "mysql",
     host: "localhost"
 })
-
+    
 sequelize.authenticate().then(() => {
     console.log("Connected to database")
 }).catch(() => {
