@@ -1,4 +1,4 @@
-# Documentație Aplicație Muzică
+# Documentație Aplicație
 
 ## Introducere
 Conform unui articol al National Institute of Standards and Technology, Cloud Computing este un concept modern bazat pe virtualizare care furnizează servicii IaaS (Infrastructure as a Service), PaaS (Platform as a Service), SaaS (Software as a Service) prin Internet. Principalul său rol este de a permite accesul la rețeaua de comunicații omniprezente, convenabile și la cerere, la resurse de calcul configurabile (de exemplu: rețele, servere, stocare date, aplicații și servicii). Acestea pot fi rapid furnizate și lansate cu efort minim de management sau interacțiune cu furnizorii de servicii.
@@ -89,6 +89,8 @@ function dataPullLyrics() {
 
 ## Flux de date
 Fluxul de date este realizat cu ajutorul metodelor de tip *request / response* și a metodelor de tip *HTTP request*.
+
+Baza de Date MySQL folosită în proiect are denumirea *music* și conține o tabelă numită *songs*, având câmpurile *singer*, *album* și *name*.
 
 #### Exemple de request / response
 În aplicație s-au folosit metode de __request / response__ pentru a interoga și actualiza Baza de Date. Metodele primesc ca parametru un *request.body* și actualizează datele și returnează un rezultat prin intermediul parametrului *response*.
@@ -246,8 +248,16 @@ sequelize.authenticate().then(() => {
 ```
 
 ## Capturi ecran aplicație
-![Data Base](Data Base.PNG)
+Interfața aplicației conține un set de 3 tab-uri: "Data Base", "iTunes" și "Lyrics". Pentru interfață s-au folosit stiluri din fișierul *style.css*, directorul *frontend*, cu ajutorul cărora am realizat structura de tab și am modificat modul în care sunt afișate tabele.
+
+În tab-ul __Data Base__ sunt gestionate datele din Baza de Data.
+![Data Base](https://user-images.githubusercontent.com/65232551/81951189-88146280-960d-11ea-8f13-608e6de1aa23.PNG)
+
+În tab-ul __iTunes__ sunt gestionate datele preluate prin intermediul API REST din aplicația iTunes Store.
 ![iTunes](https://user-images.githubusercontent.com/65232551/81948104-0a9b2300-960a-11ea-97e3-2710e9bfc19d.PNG)
+
+În tab-ul __Lyrics__ sunt gestionate datele preluate prin intermediul API REST de pe website-ul Lyrics.ovh.
+![Lyrics](https://user-images.githubusercontent.com/65232551/81951224-919dca80-960d-11ea-865c-93dd54681799.PNG)
 
 ## Referințe
 * [Cloud Computing - National Institute of Standards and Technology](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-145.pdf)
