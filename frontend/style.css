@@ -50,3 +50,12 @@ body {font-family: Arial;}
   border: 1px solid #ccc;
   border-top: none;
 }
+
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 30%;
+  padding: 10px;
+}

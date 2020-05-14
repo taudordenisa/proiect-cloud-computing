@@ -2,7 +2,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="style.css" type="text/css"/>
-        <title>Songs list</title>
+        <title>Songs List</title>
     </head>
     <body>
         <h1>Songs</h1>
@@ -11,19 +11,47 @@
     <div class="tab">
         <button class="tablinks active" onclick="openTab(event, 'dataBase')">Data Base</button>
         <button class="tablinks" onclick="openTab(event, 'iTunes')">iTunes</button>
+        <button class="tablinks" onclick="openTab(event, 'lyrics')">Song Lyrics</button>
     </div>
     
     <div id="iTunes" class="tabcontent">
-        Singer or Song Name search:<br/>
-        <input type="text" name="searchValue" id="searchValue"/>
-        <button onClick="dataPullITunes()">iTunes</button> <br/> <br/>
+        <div class="row">
+            <div class="column">
+                Artist or Song Name<br/>
+                <input type="text" name="searchValue" id="searchValue"/>
+            </div>
+            <div class="column">
+                Results Number<br/>
+                <input type="number" id="resultsNumber" name="resultsNumber" min="1" max="100">
+            </div>
+            <div class="column">
+                <button onClick="dataPullITunes()">Search</button> <br/> <br/>
+            </div>
+        </div>
         <div id="tableITunes"></div>
+    </div>
+    
+    <div id="lyrics" class="tabcontent">
+        <div class="row">
+            <div class="column">
+                Artist Name<br/>
+                <input type="text" name="artistLyrics" id="artistLyrics"/>
+            </div>
+            <div class="column">
+                Song Title<br/>
+                <input type="text" name="songLyrics" id="songLyrics"/>
+            </div>
+            <div class="column">
+                <button onClick="dataPullLyrics()">Search</button> <br/> <br/>
+            </div>
+        </div>
+        <div id="showLyrics"></div>
     </div>
     
     <div id="dataBase" class="tabcontent active" style="display: block">
         <form onSubmit="saveSong(event)">
             <input type="hidden" name="id" id="id"/> <br/>
-            Singer Name:<br/>
+            Artist Name:<br/>
             <input type="text" name="singer" id="singer"/> <br/>
             Album:<br/>
             <input type="text" name="album" id="album"> <br/>
@@ -60,19 +88,17 @@
         
         function dataPullITunes() {
             let searchValue = $('#searchValue').val()
-            console.log(searchValue)
-            let urlEncoded = encodeURI("https://itunes.apple.com/search?term='" + searchValue + "'&limit=5&media=music")
-            console.log(urlEncoded)
+            let resultsNumber = $('#resultsNumber').val()
+            let urlEncoded = encodeURI("https://itunes.apple.com/search?term='" + searchValue + "'&limit=" + resultsNumber + "&media=music")
             axios.get(urlEncoded)
             .then(function(response) { 
-                console.log(response)
-                
                 let htmlITunes = ` <table >
                         <tr>
-                            <th>Singer</th>
+                            <th>Artist</th>
                             <th>Song Name</th>
                             <th>Collection</th>
                             <th>Country</th>
+                            <th>Preview Song</th>
                         </tr>`
                         
                 response.data.results.forEach(function(song) {
@@ -81,6 +107,12 @@
                                 <td>${song.trackName}</td>
                                 <td>${song.collectionName}</td>
                                 <td>${song.country}</td>
+                                <td>
+                                    <audio controls>
+                                        <source src="${song.previewUrl}" type="audio/mpeg">
+                                        Your browser does not support the audio element.
+                                    </audio>
+                                </td>
                             </tr>`
                 })
                 
@@ -93,6 +125,22 @@
                 $('#tableITunes').html(`<p>No items available! Please search for another song.</p>`)
             })
         }
+        
+        function dataPullLyrics() {
+            let artist = $('#artistLyrics').val()
+            let title = $('#songLyrics').val()
+            axios.get("https://api.lyrics.ovh/v1/" + artist + "/" + title)
+            .then(function(response) { 
+                let lyricsText = response.request.responseText
+                let lyricsTextHtml = lyricsText.replace(/\\n/g, "<br/>")
+                let lyricsJSON = JSON.parse(lyricsTextHtml)
+                $('#showLyrics').html(`<p>${lyricsJSON.lyrics}</p>`)
+            })
+            .catch(function(error) {
+                console.log(error)
+                $('#showLyrics').html(`<p>No lyrics available! Please search for another song.</p>`)
+            })
+        }
   
         function showSongs() {
             axios.get('/songs').then(function(results) {
@@ -100,7 +148,7 @@
                 let html = ` <table style="width:500px;">
                         <tr>
                             <th>ID</th>
-                            <th>Singer Name</th>
+                            <th>Artist Name</th>
                             <th>Album</th> 
                             <th>Song Name</th>
                             <th>Actions</th>
@@ -130,7 +178,6 @@
         function saveSong(event) {
             event.preventDefault()
             
-            //get values from fields
             let id = $('#id').val()
             let singer = $('#singer').val()
             let album = $('#album').val()
@@ -162,15 +209,13 @@
         }
         
         function editSong(id) {
-            //get the values from the server
             axios.get('/songs/'+id).then(function(result) {
-                //display values in the form
                 $('#id').val(result.data.id)
                 $('#singer').val(result.data.singer)
                 $('#album').val(result.data.album)
                 $('#name').val(result.data.name) 
-            }).catch(function(err) {
-                console.log(err)
+            }).catch(function(error) {
+                console.log(error)
                 alert('Could not find resource')
             })
         }
@@ -178,7 +223,8 @@
         function deleteSong(id) {
             axios.delete('/songs/'+id).then(function(result) {
                 showSongs()
-            }).catch(function(err) {
+            }).catch(function(error) {
+                console.log(error)
                 alert('Resource could not delete resource')
             }) 
         }

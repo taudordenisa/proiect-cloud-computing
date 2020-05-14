@@ -22,10 +22,6 @@ const Songs = sequelize.define('songs', {
 const app = express()
 app.use('/', express.static('frontend'))
 
-/*app.get('/hello', (request, response) => {
-   response.status(200).json({hello: process.env})
-})*/
-
 app.get('/createdb', (request, response) => {
     sequelize.sync({force:true}).then(() => {
         response.status(200).send('tables created')
@@ -38,7 +34,6 @@ app.get('/createdb', (request, response) => {
 app.use(express.json())
 app.use(express.urlencoded())
 
-//definire endpoint POST /messages
 app.post('/songs', (request, response) => {
     Songs.create(request.body).then((result) => {
         response.status(201).json(result)
