@@ -247,6 +247,7 @@ sequelize.authenticate().then(() => {
 
 ## Capturi ecran aplicație
 ![Data Base](Data Base.PNG)
+![iTunes](https://user-images.githubusercontent.com/65232551/81948104-0a9b2300-960a-11ea-97e3-2710e9bfc19d.PNG)
 
 ## Referințe
 * [Cloud Computing - National Institute of Standards and Technology](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-145.pdf)
